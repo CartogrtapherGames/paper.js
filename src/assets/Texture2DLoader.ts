@@ -8,6 +8,10 @@ import { Assets } from "./AssetManager.ts";
  */
 export class Texture2DLoader implements AssetLoader<BitmapSource> {
 
+  public canCache(): boolean {
+    return true;
+  }
+
   async load(url: string): Promise<BitmapSource> {
     const response = await fetch(url);
     if(!response.ok) {

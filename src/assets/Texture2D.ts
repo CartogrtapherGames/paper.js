@@ -90,7 +90,7 @@ export class Texture2D<T extends TextureSource<any> = TextureSource<any>> {
 	public dispose(force = false){
 		if(this.isDisposed()) return;
 		if(force){
-			this._textureSource?.dispose(force);
+			this.destroy();
 		} else {
 			this._textureSource?.dispose();
 		}

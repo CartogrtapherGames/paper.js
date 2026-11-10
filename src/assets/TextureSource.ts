@@ -66,7 +66,6 @@ export abstract class TextureSource<T extends Record<string, any>>  {
 
   /**
    * dispose the texture
-   * @abstract
    */
   dispose(force = false): void {
     if (this.isDisposed()) return;
