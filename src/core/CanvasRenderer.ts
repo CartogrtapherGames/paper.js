@@ -1,6 +1,5 @@
 import type {Container} from "@scene/Container.ts";
-import type {TextureSource} from "@assets/TextureSource.ts";
-import type {Drawable} from "@core/Drawable.ts";
+import {CacheEntry} from "../cache/CacheEntry.ts";
 
 interface ICommands {
 
@@ -12,7 +11,7 @@ export class CanvasRenderer {
   private _batch : ICommands[];
   private _root: Container;
 
-  private _cache: Map<string,TextureCache>
+  private _cache: Map<string,CacheEntry>
   constructor(canvas: HTMLCanvasElement) {
     this._context = canvas.getContext('2d');
     this._batch = [];
@@ -36,34 +35,5 @@ export class CanvasRenderer {
     this._root = root;
   }
 }
-// Roughly 6 mins
-const MAX_IDLE_TIME = 360000;
 
-export class TextureCache {
 
-  public source: TextureSource<any>;
-  public owners: Set<Drawable>;
-  public timestamp: number;
-
-  public touch(){
-    this.timestamp = performance.now();
-  }
-
-  public isInactive(): boolean {
-    const currentTime = performance.now();
-    return currentTime > this.timestamp + MAX_IDLE_TIME
-  }
-  public hasOwners(): boolean {
-    return !!this.owners;
-  }
-
-  public isSafeToUnload(): boolean {
-    return !this.hasOwners() && this.isInactive();
-  }
-  public addOwner(owner: Drawable): void {
-    this.owners.add(owner);
-  }
-  public removeOwner(owner: Drawable): void {
-    this.owners.delete(owner);
-  }
-}
