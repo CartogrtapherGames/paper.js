@@ -15,6 +15,7 @@ export class AssetManager {
 
   constructor(basePath: string = "") {
     this._cache = new AssetCache();
+    this._cache.startSweeping();
     this._loaders = new Map<string, AssetLoader<any>>();
     this._queue = new Map<string,UnresolvedAsset>();
     this._basePath = basePath;
@@ -85,6 +86,11 @@ export class AssetManager {
     return this._cache.exists(key);
   }
 
+  unload(key: string) {
+    if(this.exists(key)) throw new Error(`no asset under the name ${key} to unload`);
+    this._cache.unload(key);
+  }
+
   protected getQueued(key: string): UnresolvedAsset {
     if(!this._queue.has(key)) throw new Error("no asset queued under key: " + key);
     return this._queue.get(key);
@@ -124,6 +130,7 @@ export class AssetManager {
   private materialize<T>(loader: AssetLoader<T>, resolved: ResolvedAsset<T>): any {
     return loader.create ? loader.create(resolved) : resolved.source;
   }
+
 }
 
 type AssetInput = UnresolvedAsset | NonEmptyArray<UnresolvedAsset>;

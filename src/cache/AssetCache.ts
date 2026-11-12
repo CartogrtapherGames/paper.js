@@ -1,7 +1,8 @@
 import {CacheEntry, MAX_IDLE_TIME} from "./CacheEntry.ts";
 import type {Disposable} from "./Disposable.ts";
+import type {Emittable} from "@assets/Emittable.ts";
 
-
+type AssetType = Disposable & Emittable;
 /**
  * The cache class that handle keeping track of resources and sweep them away when not used anymore.
  * it also has the capacity to have an asset to be transient.
@@ -10,7 +11,7 @@ import type {Disposable} from "./Disposable.ts";
  */
 export class AssetCache {
 
-  private readonly _cache : Map<string,CacheEntry<Disposable>>;
+  private readonly _cache : Map<string,CacheEntry<AssetType>>;
   private _sweepHandle?: ReturnType<typeof setInterval>;
 
   /**
@@ -52,7 +53,7 @@ export class AssetCache {
    * @param key
    * @param source
    */
-  public add(key: string, source: Disposable): CacheEntry<Disposable> {
+  public add(key: string, source: AssetType): CacheEntry<AssetType> {
     if(this.exists(key)) return this._cache.get(key);
     const entry = new CacheEntry(source);
     this._cache.set(key,entry)
@@ -63,7 +64,7 @@ export class AssetCache {
    * Fetch a resources from the cache.
    * @param key - the resource key
    */
-  public get<T extends Disposable>(key: string): CacheEntry<T> {
+  public get<T extends AssetType>(key: string): CacheEntry<T> {
     if(this.exists(key)) return this._cache.get(key) as CacheEntry<T>;
     throw new Error(`Cache key "${key}" does not exist`);
   }

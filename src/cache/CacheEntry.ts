@@ -1,4 +1,5 @@
 import type {Disposable} from "./Disposable.ts";
+import type {Emittable} from "@assets/Emittable.ts";
 
 // Roughly 6 mins
 export const MAX_IDLE_TIME = 360000;
@@ -6,7 +7,7 @@ export const MAX_IDLE_TIME = 360000;
 /**
  * the class that manage a cache entry in the cache
  */
-export class CacheEntry<T extends Disposable> {
+export class CacheEntry<T extends Disposable & Emittable> {
 
   private readonly _source: T;
   private readonly _owners: Set<T>;
@@ -23,6 +24,8 @@ export class CacheEntry<T extends Disposable> {
     this._owners = new Set<T>();
     this._transient = transient;
     this._lastActivity = performance.now();
+    this._source.on("addOwner", this.addOwner);
+    this._source.off("removeOwner", this.removeOwner)
   }
 
   /**
@@ -72,6 +75,8 @@ export class CacheEntry<T extends Disposable> {
     this._source.dispose(true);
     this._lastActivity = 0;
     this._owners.clear();
+    this._source.off("addOwner", this.addOwner);
+    this._source.off("removeOwner", this.removeOwner);
   }
 
   /**
@@ -94,6 +99,7 @@ export class CacheEntry<T extends Disposable> {
    */
   public addOwner(owner: T) {
     this._owners.add(owner);
+    this.touch();
   }
 
   /**
@@ -102,5 +108,6 @@ export class CacheEntry<T extends Disposable> {
    */
   public removeOwner(owner: T) {
     this._owners.delete(owner);
+    this.touch();
   }
 }

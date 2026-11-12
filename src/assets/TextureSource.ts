@@ -1,12 +1,20 @@
 import {EventEmitter} from "@core/EventEmitter.ts";
+import type {Disposable} from "../cache/Disposable.ts";
+import type {Emittable} from "@assets/Emittable.ts";
 
-type TextureSourceEventName = "depleted" | string;
+
+interface TextureSourceEvents {
+  addOwner: Disposable;
+  removeOwner: Disposable;
+  destroy: void;
+  depleted: void;
+}
 
 /**
  * the class that hold texture data.
  * @remarks it is canvas bound for the moment until a proper renderer is added to hold gpu data.
  */
-export abstract class TextureSource<T extends Record<string, any>>  {
+export abstract class TextureSource<T extends Record<string, any>> implements Disposable, Emittable<TextureSourceEvents> {
 
   protected _resource: T | null;
   protected _width: number;
@@ -25,8 +33,17 @@ export abstract class TextureSource<T extends Record<string, any>>  {
     return this;
   }
 
+  public addOwner(owner: Disposable) {
+    this.emit("addOwner", owner);
+  }
+
+  public removeOwner(owner: Disposable) {
+    this.emit("removeOwner", owner);
+  }
+
   /**
    * return the texture source amount of references from textures.
+   * @deprecated we use ownership from the cache now instead
    */
   public get refCount(): number {
     return this._refCount;
@@ -80,19 +97,21 @@ export abstract class TextureSource<T extends Record<string, any>>  {
     }
   }
 
-  protected abstract destroy(): void;
+  abstract destroy(): void;
 
   /**
    * add a references count to a texture source.
    * @remarks it shouldnt be messed with unless you know what you doing with it.
+   * @deprecated it has been deprecated in favor of
    */
   public addRef() {
     this._refCount++;
   }
 
-  protected markAsDestroyed(){
+  protected markAsDestroyed() {
     this._destroyed = true;
   }
+
   /**
    * release the source from the texture until its ref count reach 0 and will emit a depleted event.
    * @deprecated use dispose instead.
@@ -104,39 +123,31 @@ export abstract class TextureSource<T extends Record<string, any>>  {
     }
   }
 
-  /**
-   * subscribe to the source event
-   * @param eventName - the event name
-   * @param callback - the function callback
-   */
-  public on(eventName: TextureSourceEventName, callback: () => void) {
-    this._emitter.on(eventName, callback);
+  public on<K extends keyof TextureSourceEvents>(
+      eventName: K,
+      callback: (payload: TextureSourceEvents[K]) => void
+  ): void {
+    this._emitter.on(eventName as string, callback);
   }
 
-  /**
-   * unsubscribe from to the source event
-   * @param eventName - the event name
-   * @param callback - the function callback
-   */
-  public off(eventName: TextureSourceEventName, callback: () => void) {
-    this._emitter.off(eventName, callback);
+  public off<K extends keyof TextureSourceEvents>(
+      eventName: K,
+      callback: (payload: TextureSourceEvents[K]) => void
+  ): void {
+    this._emitter.off(eventName as string, callback);
   }
 
-  /**
-   * subscribe once to a source event
-   * @param eventName - the event name
-   * @param callback - the function callback
-   */
-  public once(eventName: TextureSourceEventName, callback: () => void) {
-    this._emitter.once(eventName, callback);
+  public once<K extends keyof TextureSourceEvents>(
+      eventName: K,
+      callback: (payload: TextureSourceEvents[K]) => void
+  ): void {
+    this._emitter.once(eventName as string, callback);
   }
 
-  /**
-   * emit a source event
-   * @param eventName - the event name
-   * @param callback - the function callback
-   */
-  public emit(eventName: TextureSourceEventName, callback: () => void) {
-    this._emitter.emit(eventName, callback);
+  public emit<K extends keyof TextureSourceEvents>(
+      eventName: K,
+      payload: TextureSourceEvents[K]
+  ): void {
+    this._emitter.emit(eventName as string, payload);
   }
 }

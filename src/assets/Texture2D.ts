@@ -1,10 +1,11 @@
 import { Rectangle } from '@maths/Rectangle';
 import { TextureSource } from './TextureSource';
+import type {Disposable} from "../cache/Disposable.ts";
 
 /**
  * the data class that manage textures for UI and 2D visual elements on the screen.
  */
-export class Texture2D<T extends TextureSource<any> = TextureSource<any>> {
+export class Texture2D<T extends TextureSource<any> = TextureSource<any>> implements Disposable {
 
 	protected _textureSource: T | null = null;
 	protected _width: number;
@@ -22,11 +23,11 @@ export class Texture2D<T extends TextureSource<any> = TextureSource<any>> {
 		this._height = 0;
 		this._frame = Rectangle.empty();
 		if (textureSource) {
-			this.textureSource = textureSource; // routes through the setter so addRef() actually runs
+			this.textureSource = textureSource;
 		}
 	}
 
-	static empty(): Texture2D<TextureSource<any>> {
+	static empty(): Texture2D {
 		return new Texture2D();
 	}
 	/**
@@ -37,11 +38,14 @@ export class Texture2D<T extends TextureSource<any> = TextureSource<any>> {
 		return this._textureSource;
 	}
 
+
 	public set textureSource(value: T) {
 		if(this._textureSource === value) return;
-		if(this._textureSource) this._textureSource.release();
+		if(this._textureSource){
+			this._textureSource.removeOwner(this);
+		}
 		this._textureSource = value;
-		this._textureSource.addRef();
+		this._textureSource.addOwner(this);
 	}
 
 	/**
@@ -99,7 +103,7 @@ export class Texture2D<T extends TextureSource<any> = TextureSource<any>> {
 		this._destroyed = true;
 	}
 
-	protected destroy() {
+	public destroy() {
 		this._textureSource.dispose();
 		this._textureSource = null;
 		this._frame = null;
