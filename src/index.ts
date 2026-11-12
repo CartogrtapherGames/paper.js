@@ -7,7 +7,7 @@ export { TextureSource } from './assets/TextureSource'
 export { BitmapSource } from './assets/BitmapSource'
 export { ImageSource } from './assets/ImageSource'
 export { Texture2D } from './assets/Texture2D'
-export { AssetManager, Assets } from './assets/AssetManager'
+export { OldAssetManager, Assets } from '@assets/OldAssetManager.ts'
 
 export { DisplayObject2D } from './scene/DisplayObject2D'
 export { Sprite2D } from './scene/Sprite2D'

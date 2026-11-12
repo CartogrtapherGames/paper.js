@@ -1,7 +1,7 @@
 import type { AssetLoader } from "./AssetLoader.ts";
 import { Texture2D } from "./Texture2D.ts";
 import { BitmapSource } from "./BitmapSource.ts";
-import { Assets } from "./AssetManager.ts";
+import { Assets } from "./OldAssetManager.ts";
 
 /**
  * the loader class that handle texture loading and turn them into proper 2D texture.

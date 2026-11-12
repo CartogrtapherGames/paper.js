@@ -26,7 +26,8 @@
       "@maths/*": ["./src/maths/*"],
       "@core/*": ["./src/core/*"],
       "@assets/*": ["./src/assets/*"],
-      "@scene/*": ["./src/scene/*"]
+      "@scene/*": ["./src/scene/*"],
+      "@utils/*" : ["./src/utils/*"],
     }
   },
   "include": ["src"]

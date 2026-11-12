@@ -2,7 +2,7 @@ import './style.css'
 import { Context } from './core/Context.ts'
 import type { Drawable } from './core/Drawable.ts'
 import {BitmapSource} from "./assets/BitmapSource.ts";
-import {Assets} from "@assets/AssetManager.ts";
+import {Assets} from "@assets/OldAssetManager.ts";
 import {Texture2D} from "@assets/Texture2D.ts";
 import {Texture2DLoader} from "@assets/Texture2DLoader.ts";
 import {Sprite2D} from "@scene/Sprite2D.ts";

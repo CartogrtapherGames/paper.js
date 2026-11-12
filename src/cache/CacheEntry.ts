@@ -22,6 +22,7 @@ export class CacheEntry<T extends Disposable> {
     this._source = source;
     this._owners = new Set<T>();
     this._transient = transient;
+    this._lastActivity = performance.now();
   }
 
   /**
@@ -36,13 +37,6 @@ export class CacheEntry<T extends Disposable> {
    */
   public get source(): T {
     return this._source;
-  }
-
-  /**
-   * return the list of object currently using this resource
-   */
-  public get owners(): Set<T> {
-    return this._owners;
   }
 
   public touch() {
