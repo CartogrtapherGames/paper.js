@@ -42,14 +42,6 @@ export abstract class TextureSource<T extends Record<string, any>> implements Di
   }
 
   /**
-   * return the texture source amount of references from textures.
-   * @deprecated we use ownership from the cache now instead
-   */
-  public get refCount(): number {
-    return this._refCount;
-  }
-
-  /**
    * return the texture source width
    * @readonly
    */
@@ -91,36 +83,12 @@ export abstract class TextureSource<T extends Record<string, any>> implements Di
       this.markAsDestroyed();
       return;
     }
-    this._refCount--;
-    if (this._refCount <= 0) {
-      this._emitter.emit("destroy"); // announce it, don't destroy it
-    }
   }
 
   abstract destroy(): void;
 
-  /**
-   * add a references count to a texture source.
-   * @remarks it shouldnt be messed with unless you know what you doing with it.
-   * @deprecated it has been deprecated in favor of
-   */
-  public addRef() {
-    this._refCount++;
-  }
-
   protected markAsDestroyed() {
     this._destroyed = true;
-  }
-
-  /**
-   * release the source from the texture until its ref count reach 0 and will emit a depleted event.
-   * @deprecated use dispose instead.
-   */
-  public release() {
-    this._refCount--;
-    if (this._refCount <= 0) {
-      this._emitter.emit("depleted");
-    }
   }
 
   public on<K extends keyof TextureSourceEvents>(

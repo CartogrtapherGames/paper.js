@@ -40,10 +40,8 @@ export class Sprite2D  extends DisplayObject2D implements Drawable {
 	public set texture(value: Texture2D<SpriteSources>) {
 		if(this.texture == value) return;
 		const oldtexture = this._texture;
-		oldtexture.release();
-		this.texture = value;
-		this.texture.addRef();
-
+		oldtexture.dispose();
+		this._texture = value.addRef();
 	}
 
 	draw(ctx: CanvasRenderingContext2D): void {

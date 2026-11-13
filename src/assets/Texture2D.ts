@@ -75,51 +75,34 @@ export class Texture2D<T extends TextureSource<any> = TextureSource<any>> implem
 		this._frame = frame;
 	}
 
-	public resize(width: number, height: number) {
-		this._width = width;
-		this._height = height;
-		this.refresh();
-	}
-
-
-	protected refresh(){
-		/// TODO later.
-	}
-
-
 	public isDisposed(): boolean {
 		return this._destroyed;
 	}
 
-	public dispose(force = false){
-		if(this.isDisposed()) return;
-		if(force){
+	public dispose(force = false) {
+		if (this.isDisposed()) return;
+		if (force) {
 			this.destroy();
-		} else {
-			this._textureSource?.dispose();
+			return;
 		}
+		this._refCount--;
+		if (this._refCount <= 0) {
+			this.destroy();
+		}
+	}
+
+	public destroy() {
+		this._textureSource?.removeOwner(this);
 		this._textureSource = null;
 		this._frame = null;
 		this._destroyed = true;
 	}
 
-	public destroy() {
-		this._textureSource.dispose();
-		this._textureSource = null;
-		this._frame = null;
-		this._destroyed = true;
-	}
 	public addRef(): this {
 		this._refCount++;
 		return this;
 	}
 
-	public release(): void {
-		this._refCount--;
-		if(this._refCount <= 0){
-			this.dispose();
-		}
-	}
 
 
 }
