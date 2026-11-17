@@ -22,7 +22,8 @@
     "preview": "vite preview",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "docs:api": "cd tools/typedoc && npx typedoc"
   },
   "devDependencies": {
     "typescript": "^7.0.2",

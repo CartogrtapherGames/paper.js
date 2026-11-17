@@ -1,0 +1,8 @@
+{
+  "name": "paperjs-typedoc-tooling",
+  "private": false,
+  "devDependencies": {
+    "typescript": "6.0.x",
+    "typedoc": "^0.28.20"
+  }
+}

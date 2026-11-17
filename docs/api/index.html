@@ -1,0 +1,70 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="./"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>paper.js</title><meta name="description" content="Documentation for paper.js"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script><script async src="assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="index.html" class="title">paper.js</a>
+<div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
+<ul role="listbox" id="tsd-search-results"></ul>
+<div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+<div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></header>
+<div class="container container-main">
+<div class="col-content">
+<div class="tsd-page-title">
+<h1>paper.js</h1></div>
+<div class="tsd-panel tsd-typography"><h1 id="paperjs" class="tsd-anchor-link">paper.js<a href="#paperjs" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<p>A Canvas2D rendering + asset library built for RPG Paper Maker.</p>
+<h2 id="assetmanager" class="tsd-anchor-link">AssetManager<a href="#assetmanager" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p><code>AssetManager</code> queues, loads, and caches assets by key. A default instance is exported as <code>Assets</code>.</p>
+<h3 id="registering-loaders" class="tsd-anchor-link">Registering loaders<a href="#registering-loaders" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Only the <code>&quot;json&quot;</code> loader is registered by default. Any other asset type (e.g. textures) needs its loader registered once, up front:</p>
+<pre><code class="ts"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">Assets</span><span class="hl-1">, </span><span class="hl-2">Texture2DLoader</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;paper.js&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-2">Assets</span><span class="hl-1">.</span><span class="hl-4">registerLoader</span><span class="hl-1">(</span><span class="hl-3">&#39;texture2D&#39;</span><span class="hl-1">, </span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-4">Texture2DLoader</span><span class="hl-1">());</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="base-path" class="tsd-anchor-link">Base path<a href="#base-path" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Relative URLs passed to <code>add()</code> are resolved against a base path (absolute URLs are left untouched):</p>
+<pre><code class="ts"><span class="hl-2">Assets</span><span class="hl-1">.</span><span class="hl-2">basePath</span><span class="hl-1"> = </span><span class="hl-3">&#39;assets/&#39;</span><span class="hl-1">; </span><span class="hl-6">// or pass it to the AssetManager constructor</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="queueing-and-loading" class="tsd-anchor-link">Queueing and loading<a href="#queueing-and-loading" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p><code>add()</code> queues one or more assets without fetching anything yet. <code>load()</code> actually fetches them:</p>
+<pre><code class="ts"><span class="hl-2">Assets</span><span class="hl-1">.</span><span class="hl-4">add</span><span class="hl-1">({ </span><span class="hl-2">key:</span><span class="hl-1"> </span><span class="hl-3">&#39;hero&#39;</span><span class="hl-1">, </span><span class="hl-2">url:</span><span class="hl-1"> </span><span class="hl-3">&#39;myHero.png&#39;</span><span class="hl-1">, </span><span class="hl-2">type:</span><span class="hl-1"> </span><span class="hl-3">&#39;texture2D&#39;</span><span class="hl-1"> });</span><br/><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-7">texture</span><span class="hl-1"> = </span><span class="hl-0">await</span><span class="hl-1"> </span><span class="hl-2">Assets</span><span class="hl-1">.</span><span class="hl-4">load</span><span class="hl-1">(</span><span class="hl-3">&#39;hero&#39;</span><span class="hl-1">);</span>
+</code><button type="button">Copy</button></pre>
+
+<p><code>load()</code> also accepts an array of keys, or no argument at all to load everything currently queued:</p>
+<pre><code class="ts"><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-7">all</span><span class="hl-1"> = </span><span class="hl-0">await</span><span class="hl-1"> </span><span class="hl-2">Assets</span><span class="hl-1">.</span><span class="hl-4">load</span><span class="hl-1">([</span><span class="hl-3">&#39;hero&#39;</span><span class="hl-1">, </span><span class="hl-3">&#39;enemy&#39;</span><span class="hl-1">, </span><span class="hl-3">&#39;config&#39;</span><span class="hl-1">]);</span><br/><span class="hl-6">// or</span><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-7">all</span><span class="hl-1"> = </span><span class="hl-0">await</span><span class="hl-1"> </span><span class="hl-2">Assets</span><span class="hl-1">.</span><span class="hl-4">load</span><span class="hl-1">(); </span><span class="hl-6">// loads every queued asset</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Loading the same key again returns the cached result instead of re-fetching — <code>exists(key)</code> tells you whether a key is already cached.</p>
+<h3 id="releasing-a-texture" class="tsd-anchor-link">Releasing a texture<a href="#releasing-a-texture" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Assets are owner-tracked, not just refcounted: a <code>Texture2D</code> becomes an owner of its underlying <code>TextureSource</code> as soon as it's assigned one, and nothing removes that ownership automatically. Call <code>dispose()</code> on the <code>Texture2D</code> once you're actually done with it:</p>
+<pre><code class="ts"><span class="hl-2">texture</span><span class="hl-1">.</span><span class="hl-4">dispose</span><span class="hl-1">();</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Until something disposes it, the cache considers it in use and won't evict it, even if it's gone idle. See <a href="media/CacheSystem.md"><code>docs/CacheSystem.md</code></a> for how the idle-sweep and ownership tracking work underneath this.</p>
+</div></div>
+<div class="col-sidebar">
+<div class="page-menu">
+<div class="tsd-navigation settings">
+<details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div>
+<div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>On This Page</h3></summary>
+<div class="tsd-accordion-details"><a href="#paperjs"><span>paper.js</span></a>
+<ul>
+<li><a href="#assetmanager"><span>Asset<wbr/>Manager</span></a></li>
+<li>
+<ul>
+<li><a href="#registering-loaders"><span>Registering loaders</span></a></li>
+<li><a href="#base-path"><span>Base path</span></a></li>
+<li><a href="#queueing-and-loading"><span>Queueing and loading</span></a></li>
+<li><a href="#releasing-a-texture"><span>Releasing a texture</span></a></li></ul></li></ul></div></details></div>
+<div class="site-menu">
+<nav class="tsd-navigation"><a href="modules.html">paper.js</a>
+<ul class="tsd-small-nested-navigation" id="tsd-nav-container">
+<li>Loading...</li></ul></nav></div></div></div><footer>
+<p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer>
+<div class="overlay"></div></body></html>

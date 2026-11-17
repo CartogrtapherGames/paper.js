@@ -1,0 +1,13 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "tsconfig": "../../tsconfig.json",
+  "out": "../../docs/api",
+  "entryPoints": [
+    "../../src/assets/index.ts",
+    "../../src/cache/index.ts",
+    "../../src/core/index.ts",
+    "../../src/scene/index.ts",
+    "../../src/maths/index.ts",
+    "../../src/utils/index.ts"
+  ]
+}
