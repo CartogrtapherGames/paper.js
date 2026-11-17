@@ -3,13 +3,13 @@
   "private": false,
   "version": "0.1.0",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
+  "main": "./dist/paper.min.js",
+  "module": "./dist/paper.min.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/paper.min.js"
     }
   },
   "files": [
@@ -18,7 +18,7 @@
   "sideEffects": false,
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && tsc -p tsconfig.build.json",
+    "build": "tsc && vite build && vite build --mode development && tsc -p tsconfig.build.json",
     "preview": "vite preview",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
