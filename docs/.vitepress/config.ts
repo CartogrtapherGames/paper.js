@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Paper.js",
   description: "A Canvas based renderer",
+  base: '/paper.js/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [

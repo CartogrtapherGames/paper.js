@@ -1,0 +1,66 @@
+name: Deploy docs
+
+# Run this whenever something is pushed to master.
+on:
+  push:
+    branches: [master]
+
+# Lets this workflow publish to GitHub Pages.
+permissions:
+  pages: write
+  id-token: write
+
+# If a new push comes in while a deploy is still running, cancel the old one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Download the repo's code onto the runner.
+      - uses: actions/checkout@v4
+
+      # Install Node.js so npm commands work.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Install the root project's dependencies (vite, vitepress, etc).
+      - name: Install dependencies
+        run: npm ci
+
+      # Build the VitePress site -> docs/.vitepress/dist
+      - name: Build VitePress site
+        run: npm run docs:build
+
+      # TypeDoc lives in its own isolated package.json (separate TypeScript version) -
+      # install its dependencies separately.
+      - name: Install TypeDoc tooling
+        run: npm ci --prefix tools/typedoc
+
+      # Build the API docs -> docs/api
+      - name: Build API docs
+        run: npm run docs:api
+
+      # Put the API docs inside the VitePress output so both ship as one site.
+      # (clear the destination first so this can't accidentally nest into a leftover folder)
+      - name: Merge API docs into the site output
+        run: rm -rf docs/.vitepress/dist/api && cp -r docs/api docs/.vitepress/dist/api
+
+      # Package the final folder as the thing GitHub Pages will serve.
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/.vitepress/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # Actually publish the artifact built above to Pages.
+      - id: deployment
+        uses: actions/deploy-pages@v4
