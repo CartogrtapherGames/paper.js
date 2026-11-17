@@ -1,6 +1,10 @@
 # paper.js
 
+
 A Canvas2D rendering + asset library built for RPG Paper Maker.
+
+## documentation
+https://cartogrtaphergames.github.io/paper.js/
 
 ## AssetManager
 
