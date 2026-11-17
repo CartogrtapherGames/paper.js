@@ -1,5 +1,8 @@
 import { TextureSource } from "./TextureSource.ts";
 
+/**
+ * the texture source that use the native browser Image source.
+ */
 export class BitmapSource extends TextureSource<ImageBitmap> {
 
 	/// TODO : should have some specific stuff to do here but I am drawing a blank on this one.

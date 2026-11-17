@@ -1,5 +1,6 @@
-
-
+/**
+ * the interface that shape an object being able to receive and emit events
+ */
 export interface Emittable<Events extends Record<string, any> = Record<string, any>> {
   on<K extends keyof Events>(event: K, listener: (payload: Events[K]) => void): void;
   off<K extends keyof Events>(event: K, listener: (payload: Events[K]) => void): void;

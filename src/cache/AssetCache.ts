@@ -1,8 +1,6 @@
 import {CacheEntry, MAX_IDLE_TIME} from "./CacheEntry.ts";
-import type {Disposable} from "./Disposable.ts";
-import type {Emittable} from "@assets/Emittable.ts";
+import type {AssetType} from "@cache/AssetType.ts";
 
-type AssetType = Disposable & Emittable;
 /**
  * The cache class that handle keeping track of resources and sweep them away when not used anymore.
  * it also has the capacity to have an asset to be transient.
@@ -106,5 +104,22 @@ export class AssetCache {
       entry.unload();
     }
     this._cache.clear();
+  }
+
+
+  /**
+   * dump a snapshot of every cached entry for debugging.
+   */
+  public debug(): void {
+    console.table(
+      [...this._cache.entries()].map(([key, entry]) => ({
+        key,
+        hasOwners: entry.hasOwners(),
+        owners: entry.owners,
+        transient: entry.isTransient(),
+        inactive: entry.isInactive(),
+        idleForMs: Math.round(performance.now() - entry.lastActivity),
+      }))
+    );
   }
 }

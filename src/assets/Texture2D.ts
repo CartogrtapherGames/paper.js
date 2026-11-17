@@ -1,6 +1,8 @@
 import { Rectangle } from '@maths/Rectangle';
 import { TextureSource } from './TextureSource';
 import type {Disposable} from "../cache/Disposable.ts";
+import {BitmapSource} from "@assets/BitmapSource.ts";
+import {ImageSource} from "@assets/ImageSource.ts";
 
 /**
  * the data class that manage textures for UI and 2D visual elements on the screen.
@@ -13,7 +15,6 @@ export class Texture2D<T extends TextureSource<any> = TextureSource<any>> implem
 	protected _frame: Rectangle | null;
 	private _destroyed = false;
 	protected _refCount: number = 0;
-
 
 	public get refCount(): number {
 		return this._refCount;
@@ -102,7 +103,11 @@ export class Texture2D<T extends TextureSource<any> = TextureSource<any>> implem
 		this._refCount++;
 		return this;
 	}
+	public isBitmap(): boolean {
+		return this._textureSource instanceof BitmapSource;
+	}
 
-
-
+	public isHtmlImage(): boolean {
+		return this._textureSource instanceof ImageSource;
+	}
 }

@@ -1,7 +1,7 @@
 {
   "name": "paper.js",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -19,10 +19,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && tsc -p tsconfig.build.json",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
     "typescript": "^7.0.2",
-    "vite": "^8.3.4"
+    "vite": "^8.3.4",
+    "vitepress": "^2.0.0-alpha.21"
   }
 }

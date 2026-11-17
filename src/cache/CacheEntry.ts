@@ -14,6 +14,9 @@ export class CacheEntry<T extends Disposable & Emittable> {
   private _lastActivity: number;
   private _transient: boolean;
 
+  public get owners(): Set<T> {
+    return this._owners;
+  }
   /**
    * create a new instance of a CacheEntry with a specific resource.
    * @param source - the source to add to the cache.
@@ -24,8 +27,8 @@ export class CacheEntry<T extends Disposable & Emittable> {
     this._owners = new Set<T>();
     this._transient = transient;
     this._lastActivity = performance.now();
-    this._source.on("addOwner", this.addOwner);
-    this._source.off("removeOwner", this.removeOwner)
+    this._source.on("addOwner", this.addOwner.bind(this));
+    this._source.on("removeOwner", this.removeOwner.bind(this));
   }
 
   /**

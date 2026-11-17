@@ -4,6 +4,7 @@ import { BitmapSource } from '@assets/BitmapSource';
 import { ImageSource } from '@assets/ImageSource';
 import type { Drawable } from './Drawable';
 import { DisplayObject2D } from './DisplayObject2D';
+import {Rectangle} from "@maths";
 
 export type SpriteSources = BitmapSource | ImageSource;
 /**
@@ -12,10 +13,7 @@ export type SpriteSources = BitmapSource | ImageSource;
 export class Sprite2D  extends DisplayObject2D implements Drawable {
 
 	protected _texture: Texture2D<SpriteSources>;
-	protected _position: Point; // technically it should be observable point but no sure yet.
-	protected _scale: Point;
 	protected _anchor: Point;
-	protected _rotation: number;
 	protected _scaleMode: number;
 	//protected _visible: boolean;
 
@@ -44,10 +42,7 @@ export class Sprite2D  extends DisplayObject2D implements Drawable {
 		this._texture = value.addRef();
 	}
 
-	draw(ctx: CanvasRenderingContext2D): void {
-
-		if(!this._visible) return; // in this case we wouldnt render the  object. later on it will be transfered to the displayObject class.
-		/// in this context we would draw the context it has to be implemented.
+	getBounds(): Rectangle {
+		return undefined;
 	}
-
 }

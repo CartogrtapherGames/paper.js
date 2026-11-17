@@ -1,5 +1,6 @@
 import type {Container} from "@scene/Container.ts";
 import {CacheEntry} from "../cache/CacheEntry.ts";
+import type {AssetType, Disposable} from "@cache";
 
 interface ICommands {
 
@@ -11,12 +12,13 @@ export class CanvasRenderer {
   private _batch : ICommands[];
   private _root: Container;
 
-  private _cache: Map<string,CacheEntry>
+  private _cache: Map<string,CacheEntry<AssetType>>
   constructor(canvas: HTMLCanvasElement) {
     this._context = canvas.getContext('2d');
     this._batch = [];
   }
 
+  // @ts-expect-error
   public draw(image,x,y,width,height) {
     this._batch.push({image,x,y,width,height});
   }

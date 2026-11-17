@@ -6,9 +6,22 @@ export default defineConfig({
     tsconfigPaths: true,
   },
   build: {
+    copyPublicDir: false,
+    minify: "oxc",
+    sourcemap: true,
+    rolldownOptions: {
+      output: {
+        keepNames: true,
+        minify: {
+          mangle: true,
+          compress: true,
+          codegen: true,
+        },
+      },
+    },
     lib: {
       entry: resolve(import.meta.dirname, 'src/index.ts'),
-      name: 'PaperJS',
+      name: 'PAPER',
       fileName: 'index',
       formats: ['es'],
     },

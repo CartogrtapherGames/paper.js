@@ -1,5 +1,5 @@
 import type {AssetLoader} from "@assets/AssetLoader.ts";
-import {AssetCache} from "../cache/AssetCache.ts";
+import {AssetCache} from "@cache";
 import {JsonLoader} from "@assets/JsonLoader.ts";
 import type {NonEmptyArray} from "@utils/arrays/NonEmptyArray.ts";
 import type {UnresolvedAsset} from "@assets/UnresolvedAsset.ts";
@@ -87,8 +87,18 @@ export class AssetManager {
   }
 
   unload(key: string) {
-    if(this.exists(key)) throw new Error(`no asset under the name ${key} to unload`);
+    if(!this.exists(key)) throw new Error(`no asset under the name ${key} to unload`);
     this._cache.unload(key);
+  }
+
+
+  /** prefixes relative urls with the base path; leaves absolute urls untouched.
+   *
+   * @param url - the url to resolve
+   */
+  resolveUrl(url: string): string {
+    if (isAbsoluteUrl(url)) return url;
+    return this._basePath + url;
   }
 
   protected getQueued(key: string): UnresolvedAsset {
@@ -119,18 +129,22 @@ export class AssetManager {
     return this._loaders.get(assetType);
   }
 
-  /** prefixes relative urls with the base path; leaves absolute urls untouched.
-   * @todo maybe expose this as a public API?
-   * */
-  protected resolveUrl(url: string): string {
-    if (isAbsoluteUrl(url)) return url;
-    return this._basePath + url;
-  }
 
   private materialize<T>(loader: AssetLoader<T>, resolved: ResolvedAsset<T>): any {
     return loader.create ? loader.create(resolved) : resolved.source;
   }
 
+  /**
+   * dump loaders, queued (not yet loaded) assets, and cache state for debugging.
+   */
+  public debug(): void {
+    console.log("loaders:", [...this._loaders.keys()]);
+    console.log("queued:", [...this._queue.keys()]);
+    this._cache.debug();
+  }
+
 }
 
 type AssetInput = UnresolvedAsset | NonEmptyArray<UnresolvedAsset>;
+
+export const Assets = new AssetManager();

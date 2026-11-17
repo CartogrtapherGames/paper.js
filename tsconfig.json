@@ -23,10 +23,17 @@
     "noFallthroughCasesInSwitch": true,
 
     "paths": {
+      "@maths": ["./src/maths/index.ts"],
       "@maths/*": ["./src/maths/*"],
+      "@core": ["./src/core/index.ts"],
       "@core/*": ["./src/core/*"],
+      "@assets": ["./src/assets/index.ts"],
       "@assets/*": ["./src/assets/*"],
+      "@scene": ["./src/scene/index.ts"],
       "@scene/*": ["./src/scene/*"],
+      "@cache": ["./src/cache/index.ts"],
+      "@cache/*": ["./src/cache/*"],
+      "@utils": ["./src/utils/index.ts"],
       "@utils/*" : ["./src/utils/*"],
     }
   },
