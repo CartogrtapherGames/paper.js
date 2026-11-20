@@ -20,7 +20,6 @@ export abstract class TextureSource<T extends Record<string, any>> implements Di
   protected _width: number;
   protected _height: number;
   protected _destroyed: boolean;
-  protected _refCount: number = 0;
 
   protected _emitter: EventEmitter;
 

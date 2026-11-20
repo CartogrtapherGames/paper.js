@@ -55,7 +55,6 @@ export class AssetManager {
 
   add(entries: NonEmptyArray<UnresolvedAsset>) : void;
   add(...entries: NonEmptyArray<UnresolvedAsset>) : void;
-
   add(first: AssetInput , ...rest: UnresolvedAsset[])  {
     const entries = Array.isArray(first) ? first : [first,...rest];
     for(const entry of entries){
@@ -107,11 +106,11 @@ export class AssetManager {
   }
 
   protected async loadAsset(entry: UnresolvedAsset): Promise<any> {
-    const {url, key, type} = entry;
+    const {url, key, type, options} = entry;
     const loader = this.getLoader(type);
     if (this.exists(key)) return this.loadCachedAsset(key, loader);
 
-    const resolvedAsset = await loader.load(key, this.resolveUrl(url));
+    const resolvedAsset = await loader.load(key, this.resolveUrl(url), options);
     if (!loader.canCache()) return this.materialize(loader, resolvedAsset);
 
     const cachedAsset = this._cache.add(resolvedAsset.key, resolvedAsset.source);

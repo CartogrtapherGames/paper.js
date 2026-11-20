@@ -10,6 +10,5 @@ export class BitmapSource extends TextureSource<ImageBitmap> {
 	destroy() {
 		this._resource?.close();
 		this._resource = null;
-		this._destroyed = true;
 	}
 }
